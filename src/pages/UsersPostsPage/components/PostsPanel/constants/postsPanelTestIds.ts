@@ -5,3 +5,7 @@ export const POSTS_NO_USER_TEST_ID = 'posts-no-user';
 export const POSTS_LOADING_TEST_ID = 'posts-loading';
 export const POSTS_ERROR_TEST_ID = 'posts-error';
 export const POSTS_EMPTY_TEST_ID = 'posts-empty';
+export const NEW_POST_FORM_TEST_ID = 'new-post-form';
+export const NEW_POST_TITLE_INPUT_TEST_ID = 'new-post-title-input';
+export const NEW_POST_BODY_INPUT_TEST_ID = 'new-post-body-input';
+export const NEW_POST_SUBMIT_TEST_ID = 'new-post-submit';

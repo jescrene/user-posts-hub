@@ -1,6 +1,7 @@
 import PanelContainer from '@/components/PanelContainer/PanelContainer';
 import type { User } from '@/types/user';
 
+import NewPostForm from './components/NewPostForm/NewPostForm';
 import PostsPanelBody from './components/PostsPanelBody/PostsPanelBody';
 import { POSTS_PANEL_TEST_ID } from './constants/postsPanelTestIds';
 import { getPostsSubtitle, POSTS_PANEL_TITLE } from './constants/postsPanelUiTexts';
@@ -17,7 +18,7 @@ interface PostsPanelProps {
  * Used by {@link UsersPostsPage}.
  */
 const PostsPanel = ({ user }: PostsPanelProps) => {
-    const { error, loading, posts, retry } = usePostsPanel(user);
+    const { addPost, error, loading, posts, retry } = usePostsPanel(user);
 
     return (
         <PanelContainer
@@ -30,6 +31,7 @@ const PostsPanel = ({ user }: PostsPanelProps) => {
             testId={POSTS_PANEL_TEST_ID}
             title={POSTS_PANEL_TITLE}
         >
+            {user && <NewPostForm key={user.id} onSubmit={addPost} />}
             <PostsPanelBody
                 error={error}
                 hasUser={Boolean(user)}

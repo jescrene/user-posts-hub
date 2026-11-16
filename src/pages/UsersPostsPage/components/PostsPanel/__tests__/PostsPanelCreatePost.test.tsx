@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { http, HttpResponse } from 'msw';
 import { describe, expect, it } from 'vitest';
 
+import AppProviders from '@/providers/AppProviders';
 import { POSTS_FIXTURE, USERS_FIXTURE } from '@/test/msw/fixtures';
 import { POSTS_URL, USER_POSTS_URL } from '@/test/msw/handlers';
 import { server } from '@/test/msw/server';
@@ -19,7 +20,7 @@ import {
 } from '../constants/postsPanelTestIds';
 import PostsPanel from '../PostsPanel';
 
-const [LEANNE] = USERS_FIXTURE;
+const [LEANNE, ERVIN] = USERS_FIXTURE;
 const LEANNE_POSTS_COUNT = POSTS_FIXTURE.filter(({ userId }) => userId === LEANNE.id).length;
 
 /**
@@ -104,5 +105,38 @@ describe('PostsPanel post creation', () => {
         expect(await screen.findByTestId(POST_CREATED_SNACKBAR_TEST_ID)).toBeInTheDocument();
         expect(screen.getByTestId(POSTS_ERROR_TEST_ID)).toBeInTheDocument();
         expect(screen.getByTestId(POST_CARD_TEST_ID)).toHaveTextContent('Post after error');
+    });
+
+    it('keeps the form of another user free while a post is being sent', async () => {
+        let release = () => {};
+        const released = new Promise<void>((resolve) => {
+            release = resolve;
+        });
+        server.use(
+            http.post(POSTS_URL, async () => {
+                await released;
+                return HttpResponse.json(
+                    { body: 'Sent slowly', id: 101, title: 'Pending post', userId: LEANNE.id },
+                    { status: 201 },
+                );
+            }),
+        );
+        const user = userEvent.setup();
+        const { rerender } = renderWithProviders(<PostsPanel user={LEANNE} />);
+        await screen.findAllByTestId(POST_CARD_TEST_ID);
+
+        await publishPost(user, 'Pending post', 'Sent slowly');
+        expect(screen.getByTestId(NEW_POST_SUBMIT_TEST_ID)).toBeDisabled();
+
+        rerender(
+            <AppProviders>
+                <PostsPanel user={ERVIN} />
+            </AppProviders>,
+        );
+        expect(screen.getByTestId(NEW_POST_SUBMIT_TEST_ID)).toBeEnabled();
+
+        release();
+        expect(await screen.findByTestId(POST_CREATED_SNACKBAR_TEST_ID)).toBeInTheDocument();
+        expect(screen.queryByText('Pending post')).not.toBeInTheDocument();
     });
 });

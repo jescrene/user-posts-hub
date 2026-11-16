@@ -17,9 +17,11 @@ export const usePostsPanel = (user: User | null) => {
     const [createdPosts, setCreatedPosts] = useState<Post[]>([]);
     const [showCreatedNotice, setShowCreatedNotice] = useState(false);
     const [failedUserId, setFailedUserId] = useState<number | null>(null);
+    // Users with a post being sent. A list, so a request that ends does not unlock another one.
+    const [pendingUserIds, setPendingUserIds] = useState<number[]>([]);
     const nextLocalId = useRef(-1);
     const { data, error, loading, retry } = usePostsByUser(user?.id ?? null);
-    const { clearError, createPost, creating, error: createError } = useCreatePost();
+    const { clearError, createPost, error: createError } = useCreatePost();
 
     /**
      * Creates a post for the selected user and shows it first in the list.
@@ -30,10 +32,13 @@ export const usePostsPanel = (user: User | null) => {
         async ({ body, title }: NewPostValues) => {
             if (!user) return false;
 
-            const created = await createPost({ body, title, userId: user.id });
+            const userId = user.id;
+            setPendingUserIds((ids) => [...ids, userId]);
+            const created = await createPost({ body, title, userId });
+            setPendingUserIds((ids) => ids.filter((id) => id !== userId));
 
             if (!created) {
-                setFailedUserId(user.id);
+                setFailedUserId(userId);
                 return false;
             }
 
@@ -60,7 +65,8 @@ export const usePostsPanel = (user: User | null) => {
         closeCreatedNotice,
         // The error belongs to the user it failed for, so it is hidden after selecting another.
         createFailed: Boolean(createError) && failedUserId === user?.id,
-        creating,
+        // The post is being sent for the selected user, so the form of another user stays free.
+        creating: user ? pendingUserIds.includes(user.id) : false,
         error,
         loading,
         posts,

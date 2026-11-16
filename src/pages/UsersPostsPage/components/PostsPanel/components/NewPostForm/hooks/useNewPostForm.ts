@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState, type FormEvent } from 'react';
+import { useCallback, useMemo, useRef, useState, type FormEvent } from 'react';
 
 import { useUiTexts } from '@/hooks/useUiTexts';
 
@@ -29,6 +29,8 @@ export const useNewPostForm = ({ onEdit, onSubmit, submitting }: UseNewPostFormP
     const [values, setValues] = useState<NewPostValues>(EMPTY_VALUES);
     const [touched, setTouched] = useState<TouchedFields>(UNTOUCHED);
     const [submitAttempted, setSubmitAttempted] = useState(false);
+    // Title field, focused after each attempt so keyboard users do not lose their place.
+    const titleRef = useRef<HTMLInputElement>(null);
 
     const texts = useUiTexts(newPostFormUiTexts);
     const errors = useMemo(() => validateNewPost(values), [values]);
@@ -71,6 +73,7 @@ export const useNewPostForm = ({ onEdit, onSubmit, submitting }: UseNewPostFormP
         async (event: FormEvent<HTMLFormElement>) => {
             event.preventDefault();
             if (submitting) return;
+            const form = event.currentTarget;
             setSubmitAttempted(true);
 
             if (Object.keys(errors).length > 0) return;
@@ -80,9 +83,16 @@ export const useNewPostForm = ({ onEdit, onSubmit, submitting }: UseNewPostFormP
                 setTouched(UNTOUCHED);
                 setSubmitAttempted(false);
             }
+
+            // The button is disabled while sending, so the browser drops its focus: bring it back,
+            // unless the person has moved to another part of the page meanwhile.
+            const active = document.activeElement;
+            if (!active || active === document.body || form.contains(active)) {
+                titleRef.current?.focus();
+            }
         },
         [errors, onSubmit, submitting, values],
     );
 
-    return { changeValue, errors: visibleErrors, handleSubmit, touchField, values };
+    return { changeValue, errors: visibleErrors, handleSubmit, titleRef, touchField, values };
 };

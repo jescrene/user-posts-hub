@@ -70,6 +70,7 @@ describe('NewPostForm', () => {
         expect(onSubmit).toHaveBeenCalledWith({ body: 'My text', title: 'My title' });
         expect(getTitleInput()).toHaveValue('');
         expect(getBodyInput()).toHaveValue('');
+        expect(getTitleInput()).toHaveFocus();
     });
 
     it('keeps the values when the post could not be created', async () => {
@@ -81,6 +82,7 @@ describe('NewPostForm', () => {
 
         expect(getTitleInput()).toHaveValue('My title');
         expect(getBodyInput()).toHaveValue('My text');
+        expect(getTitleInput()).toHaveFocus();
     });
 
     it('shows the error of the last attempt and reports each edit', async () => {

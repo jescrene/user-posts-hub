@@ -38,7 +38,7 @@ interface NewPostFormProps {
  * Used by {@link PostsPanel}.
  */
 const NewPostForm = ({ failed, onEdit, onSubmit, submitting }: NewPostFormProps) => {
-    const { changeValue, errors, handleSubmit, touchField, values } = useNewPostForm({
+    const { changeValue, errors, handleSubmit, titleRef, touchField, values } = useNewPostForm({
         onEdit,
         onSubmit,
         submitting,
@@ -59,6 +59,7 @@ const NewPostForm = ({ failed, onEdit, onSubmit, submitting }: NewPostFormProps)
                 error={Boolean(errors.title)}
                 helperText={errors.title}
                 id={TITLE_INPUT_ID}
+                inputRef={titleRef}
                 label={texts.titleLabel}
                 onBlur={() => touchField('title')}
                 onChange={({ target }) => changeValue('title', target.value)}

@@ -8,6 +8,7 @@ export class HttpError extends Error {
     /**
      * @param status - HTTP status of the response.
      * @param url - Requested URL, included in the message to help debugging.
+     * Used by {@link request}.
      */
     constructor(status: number, url: string) {
         super(`Request to ${url} failed with status ${status}`);

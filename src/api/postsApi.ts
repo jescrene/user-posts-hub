@@ -7,6 +7,7 @@ import { request } from './httpClient';
  * Gets the posts written by a user.
  * @param userId - Id of the user.
  * @param signal - Cancels the request.
+ * Used by {@link getPostsByUser} and {@link createPost}.
  */
 export const getPostsByUser = (userId: number, signal?: AbortSignal) =>
     request<Post[]>(getUserPostsEndpoint(userId), { signal });

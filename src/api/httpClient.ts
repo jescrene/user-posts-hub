@@ -2,8 +2,12 @@ import { API_BASE_URL } from '@/constants/api';
 
 import { HttpError } from './HttpError';
 
+/** HTTP methods supported by the request function. */
 type HttpMethod = 'GET' | 'POST';
 
+/**
+ * Options for the request function.
+ */
 interface RequestOptions {
     method?: HttpMethod;
     /** Data sent as the JSON body of the request. */
@@ -19,6 +23,7 @@ interface RequestOptions {
  * @returns The parsed response body.
  * @throws {HttpError} When the response status is not 2xx.
  * @throws {TypeError} When the network fails.
+ * Used by {@link getUsers}, {@link getPostsByUser} and {@link createPost}.
  */
 export const request = async <T>(
     path: string,

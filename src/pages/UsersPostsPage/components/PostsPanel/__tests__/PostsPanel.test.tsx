@@ -15,7 +15,7 @@ import {
     POSTS_LOADING_TEST_ID,
     POSTS_NO_USER_TEST_ID,
 } from '../constants/postsPanelTestIds';
-import { POSTS_RETRY_LABEL } from '../constants/postsPanelUiTexts';
+import { postsPanelUiTexts } from '../constants/postsPanelUiTexts';
 import PostsPanel from '../PostsPanel';
 
 const [LEANNE, , CLEMENTINE] = USERS_FIXTURE;
@@ -55,7 +55,7 @@ describe('PostsPanel', () => {
 
         expect(await screen.findByTestId(POSTS_ERROR_TEST_ID)).toBeInTheDocument();
 
-        await user.click(screen.getByRole('button', { name: POSTS_RETRY_LABEL }));
+        await user.click(screen.getByRole('button', { name: postsPanelUiTexts.en.retryLabel }));
 
         expect(await screen.findAllByTestId(POST_CARD_TEST_ID)).toHaveLength(LEANNE_POSTS.length);
     });

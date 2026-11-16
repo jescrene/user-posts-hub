@@ -3,6 +3,7 @@ import TouchAppOutlinedIcon from '@mui/icons-material/TouchAppOutlined';
 
 import EmptyState from '@/components/EmptyState/EmptyState';
 import ErrorState from '@/components/ErrorState/ErrorState';
+import { useUiTexts } from '@/hooks/useUiTexts';
 import type { Post } from '@/types/post';
 
 import {
@@ -10,13 +11,7 @@ import {
     POSTS_ERROR_TEST_ID,
     POSTS_NO_USER_TEST_ID,
 } from '../../constants/postsPanelTestIds';
-import {
-    POSTS_EMPTY_TEXT,
-    POSTS_ERROR_MESSAGE,
-    POSTS_ERROR_TITLE,
-    POSTS_NO_USER_TEXT,
-    POSTS_RETRY_LABEL,
-} from '../../constants/postsPanelUiTexts';
+import { postsPanelUiTexts } from '../../constants/postsPanelUiTexts';
 import PostList from '../PostList/PostList';
 import PostListSkeleton from '../PostListSkeleton/PostListSkeleton';
 
@@ -38,11 +33,13 @@ interface PostsPanelBodyProps {
  * Used by {@link PostsPanel}.
  */
 const PostsPanelBody = ({ error, hasUser, loading, onRetry, posts }: PostsPanelBodyProps) => {
+    const texts = useUiTexts(postsPanelUiTexts);
+
     if (!hasUser) {
         return (
             <EmptyState
                 icon={<TouchAppOutlinedIcon fontSize="large" />}
-                message={POSTS_NO_USER_TEXT}
+                message={texts.noUserText}
                 testId={POSTS_NO_USER_TEST_ID}
             />
         );
@@ -53,11 +50,11 @@ const PostsPanelBody = ({ error, hasUser, loading, onRetry, posts }: PostsPanelB
     if (error) {
         return (
             <ErrorState
-                message={POSTS_ERROR_MESSAGE}
+                message={texts.errorMessage}
                 onRetry={onRetry}
-                retryLabel={POSTS_RETRY_LABEL}
+                retryLabel={texts.retryLabel}
                 testId={POSTS_ERROR_TEST_ID}
-                title={POSTS_ERROR_TITLE}
+                title={texts.errorTitle}
             />
         );
     }
@@ -66,7 +63,7 @@ const PostsPanelBody = ({ error, hasUser, loading, onRetry, posts }: PostsPanelB
         return (
             <EmptyState
                 icon={<ArticleOutlinedIcon fontSize="large" />}
-                message={POSTS_EMPTY_TEXT}
+                message={texts.emptyText}
                 testId={POSTS_EMPTY_TEST_ID}
             />
         );

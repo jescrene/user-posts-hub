@@ -11,7 +11,7 @@ import UsersPostsPage from '@/pages/UsersPostsPage/UsersPostsPage';
 import { SAppContainer, SAppHeader } from './styled';
 
 /**
- * Root component: the page header with the language switch, and the main content.
+ * Main component of the app. It contains the header and the main page.
  */
 const App = () => {
     const { language, setLanguage } = useLanguage();

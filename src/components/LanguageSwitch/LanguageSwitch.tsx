@@ -5,19 +5,24 @@ import { LANGUAGE_NAMES, LANGUAGES } from '@/constants/languages';
 import { LANGUAGE_SWITCH_TEST_ID } from '@/constants/testIds';
 import type { Language } from '@/types/language';
 
+/**
+ * Props for the LanguageSwitch component.
+ */
 interface LanguageSwitchProps {
-    /** Language the interface is shown in. */
     language: Language;
-    /** Receives the language the person picks. */
     onChange: (language: Language) => void;
-    /** Accessible name of the group, e.g. "Language". */
     label: string;
 }
 
 /**
- * Buttons to pick the language of the interface. Each one shows the language code and is named by
- * the language in that language, e.g. "Español", so anyone can find their own.
- * Used by {@link App}.
+ * Switches the language of the page. It is a group of toggle buttons, one for each language.
+ * The buttons are labeled with the language code, and the aria-label of each button is the name of the language in that language.
+ * Used by {@link Header} and {@link SearchResults}.
+ * @param param0
+ * @param param0.label
+ * @param param0.language
+ * @param param0.onChange
+ * @constructor
  */
 const LanguageSwitch = ({ label, language, onChange }: LanguageSwitchProps) => (
     <ToggleButtonGroup

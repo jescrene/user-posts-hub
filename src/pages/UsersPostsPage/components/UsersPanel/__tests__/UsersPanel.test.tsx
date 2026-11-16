@@ -15,7 +15,9 @@ import {
     USERS_ERROR_TEST_ID,
     USERS_LOADING_TEST_ID,
 } from '../constants/usersPanelTestIds';
-import { USER_SEARCH_CLEAR_LABEL, USERS_RETRY_LABEL } from '../constants/usersPanelUiTexts';
+import { usersPanelUiTexts } from '../constants/usersPanelUiTexts';
+
+const TEXTS = usersPanelUiTexts.en;
 import UsersPanel from '../UsersPanel';
 
 /**
@@ -52,7 +54,7 @@ describe('UsersPanel', () => {
         expect(items).toHaveLength(1);
         expect(within(items[0]).getByText('Ervin Howell')).toBeInTheDocument();
 
-        await user.click(screen.getByRole('button', { name: USER_SEARCH_CLEAR_LABEL }));
+        await user.click(screen.getByRole('button', { name: TEXTS.clearSearchLabel }));
 
         expect(screen.getAllByTestId(USER_LIST_ITEM_TEST_ID)).toHaveLength(USERS_FIXTURE.length);
     });
@@ -77,7 +79,7 @@ describe('UsersPanel', () => {
 
         expect(await screen.findByTestId(USERS_ERROR_TEST_ID)).toBeInTheDocument();
 
-        await user.click(screen.getByRole('button', { name: USERS_RETRY_LABEL }));
+        await user.click(screen.getByRole('button', { name: TEXTS.retryLabel }));
 
         expect(await screen.findAllByTestId(USER_LIST_ITEM_TEST_ID)).toHaveLength(
             USERS_FIXTURE.length,

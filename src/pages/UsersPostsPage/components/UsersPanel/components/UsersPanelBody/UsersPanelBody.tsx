@@ -2,16 +2,11 @@ import PersonSearchIcon from '@mui/icons-material/PersonSearch';
 
 import EmptyState from '@/components/EmptyState/EmptyState';
 import ErrorState from '@/components/ErrorState/ErrorState';
+import { useUiTexts } from '@/hooks/useUiTexts';
 import type { User } from '@/types/user';
 
 import { USERS_EMPTY_TEST_ID, USERS_ERROR_TEST_ID } from '../../constants/usersPanelTestIds';
-import {
-    getNoUsersMatchText,
-    NO_USERS_TEXT,
-    USERS_ERROR_MESSAGE,
-    USERS_ERROR_TITLE,
-    USERS_RETRY_LABEL,
-} from '../../constants/usersPanelUiTexts';
+import { usersPanelUiTexts } from '../../constants/usersPanelUiTexts';
 import UserList from '../UserList/UserList';
 import UserListSkeleton from '../UserListSkeleton/UserListSkeleton';
 
@@ -45,16 +40,18 @@ const UsersPanelBody = ({
     selectedUserId,
     users,
 }: UsersPanelBodyProps) => {
+    const texts = useUiTexts(usersPanelUiTexts);
+
     if (loading) return <UserListSkeleton />;
 
     if (error) {
         return (
             <ErrorState
-                message={USERS_ERROR_MESSAGE}
+                message={texts.errorMessage}
                 onRetry={onRetry}
-                retryLabel={USERS_RETRY_LABEL}
+                retryLabel={texts.retryLabel}
                 testId={USERS_ERROR_TEST_ID}
-                title={USERS_ERROR_TITLE}
+                title={texts.errorTitle}
             />
         );
     }
@@ -63,7 +60,7 @@ const UsersPanelBody = ({
         return (
             <EmptyState
                 icon={<PersonSearchIcon fontSize="large" />}
-                message={search.trim() ? getNoUsersMatchText(search) : NO_USERS_TEXT}
+                message={search.trim() ? texts.noUsersMatch(search) : texts.noUsers}
                 testId={USERS_EMPTY_TEST_ID}
             />
         );

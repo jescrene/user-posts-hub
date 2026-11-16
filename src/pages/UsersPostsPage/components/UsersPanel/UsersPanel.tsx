@@ -1,11 +1,13 @@
 import PanelContainer from '@/components/PanelContainer/PanelContainer';
+import { useUiTexts } from '@/hooks/useUiTexts';
 import type { User } from '@/types/user';
 
 import UserSearchField from './components/UserSearchField/UserSearchField';
 import UsersPanelBody from './components/UsersPanelBody/UsersPanelBody';
 import { USERS_PANEL_TEST_ID } from './constants/usersPanelTestIds';
-import { getUsersSubtitle, USERS_PANEL_TITLE } from './constants/usersPanelUiTexts';
+import { usersPanelUiTexts } from './constants/usersPanelUiTexts';
 import { useUsersPanel } from './hooks/useUsersPanel';
+import { getUsersSubtitle } from './utils/getUsersSubtitle';
 
 interface UsersPanelProps {
     /** Id of the selected user, or `null` when no user is selected. */
@@ -21,17 +23,16 @@ interface UsersPanelProps {
  */
 const UsersPanel = ({ onSelectUser, selectedUserId }: UsersPanelProps) => {
     const { error, filteredUsers, loading, retry, search, setSearch, totalUsers } = useUsersPanel();
+    const texts = useUiTexts(usersPanelUiTexts);
 
     return (
         <PanelContainer
-            subtitle={getUsersSubtitle({
-                error,
-                loading,
-                shownCount: filteredUsers.length,
-                totalCount: totalUsers,
-            })}
+            subtitle={getUsersSubtitle(
+                { error, loading, shownCount: filteredUsers.length, totalCount: totalUsers },
+                texts,
+            )}
             testId={USERS_PANEL_TEST_ID}
-            title={USERS_PANEL_TITLE}
+            title={texts.title}
         >
             <UserSearchField
                 disabled={loading || Boolean(error)}

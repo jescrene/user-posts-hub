@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 
+import { toError } from '@/utils/toError';
+
 /** Function that loads data and stops when the signal is aborted. */
 export type Fetcher<T> = (signal: AbortSignal) => Promise<T>;
 
@@ -45,7 +47,7 @@ export const useFetch = <T>(fetcher: Fetcher<T> | null): FetchResult<T> => {
                 setSettled({
                     attempt,
                     data: null,
-                    error: error instanceof Error ? error : new Error(String(error)),
+                    error: toError(error),
                     fetcher,
                 });
             });

@@ -1,13 +1,13 @@
 import { AVATAR_COLORS } from '@/theme/avatarColors';
 
 /**
- * @param name - Full name, e.g. "Leanne Graham".
- * @returns Up to two uppercase initials, e.g. "LG".
+ * @param name - Full name, e.g. "Leanne Graham" or "Mrs. Dennis Schulist".
+ * @returns Up to two uppercase initials, skipping titles such as "Mrs.", e.g. "LG" or "DS".
  */
 export const getInitials = (name: string) =>
     name
         .split(/\s+/)
-        .filter((word) => /^\p{L}/u.test(word))
+        .filter((word) => /^\p{L}/u.test(word) && !word.endsWith('.'))
         .slice(0, 2)
         .map((word) => word[0].toUpperCase())
         .join('');

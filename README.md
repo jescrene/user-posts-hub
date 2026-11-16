@@ -127,4 +127,4 @@ También se descartaron falsos positivos, como un posible doble envío del formu
 
 ## Tiempo invertido
 
-Unas **2 horas y 20 minutos**: del primer commit (15/11, 23:37) al commit de este README (16/11, 01:56).
+Unas **2 horas y 40 minutos**: del primer commit (15/11, 23:37) al commit que actualiza esta sección (16/11, 02:17). Incluye unos 20 minutos de la revisión final de QA y sus correcciones, de 01:57 a 02:17.

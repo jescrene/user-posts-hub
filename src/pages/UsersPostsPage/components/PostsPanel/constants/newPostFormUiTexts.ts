@@ -8,3 +8,5 @@ export const NEW_POST_TITLE_REQUIRED = 'Write a title for the post.';
 export const NEW_POST_BODY_REQUIRED = 'Write the text of the post.';
 export const NEW_POST_SUBMITTING_LABEL = 'Publishing…';
 export const NEW_POST_CREATED_TEXT = 'Your post was published.';
+export const NEW_POST_ERROR_TEXT =
+    'Your post could not be published. Check your connection and try again.';

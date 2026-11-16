@@ -8,20 +8,21 @@ type TouchedFields = Record<keyof NewPostValues, boolean>;
 const EMPTY_VALUES: NewPostValues = { body: '', title: '' };
 const UNTOUCHED: TouchedFields = { body: false, title: false };
 
+interface UseNewPostFormParams {
+    /** Creates the post; resolves to whether it was created. */
+    onSubmit: (values: NewPostValues) => Promise<boolean>;
+    /** Whether the post is being sent, so it is not sent twice. */
+    submitting: boolean;
+    /** Called when a field changes. */
+    onEdit: () => void;
+}
+
 /**
  * Business hook of the new post form: keeps the typed values, validates them and clears them
  * once the post is created. A field shows its error only after the person leaves it or tries to
  * publish, so the form does not complain while it is being filled in.
- * @param params.onSubmit - Creates the post; resolves to whether it was created.
- * @param params.submitting - Whether the post is being sent, so it is not sent twice.
  */
-export const useNewPostForm = ({
-    onSubmit,
-    submitting,
-}: {
-    onSubmit: (values: NewPostValues) => Promise<boolean>;
-    submitting: boolean;
-}) => {
+export const useNewPostForm = ({ onEdit, onSubmit, submitting }: UseNewPostFormParams) => {
     const [values, setValues] = useState<NewPostValues>(EMPTY_VALUES);
     const [touched, setTouched] = useState<TouchedFields>(UNTOUCHED);
     const [submitAttempted, setSubmitAttempted] = useState(false);
@@ -41,9 +42,13 @@ export const useNewPostForm = ({
      * @param field - Field that changed.
      * @param value - New value of the field.
      */
-    const changeValue = useCallback((field: keyof NewPostValues, value: string) => {
-        setValues((current) => ({ ...current, [field]: value }));
-    }, []);
+    const changeValue = useCallback(
+        (field: keyof NewPostValues, value: string) => {
+            setValues((current) => ({ ...current, [field]: value }));
+            onEdit();
+        },
+        [onEdit],
+    );
 
     /**
      * @param field - Field the person left.

@@ -1,4 +1,5 @@
 import SendIcon from '@mui/icons-material/Send';
+import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
@@ -6,6 +7,7 @@ import Typography from '@mui/material/Typography';
 import {
     NEW_POST_BODY_LABEL,
     NEW_POST_BODY_PLACEHOLDER,
+    NEW_POST_ERROR_TEXT,
     NEW_POST_FORM_TITLE,
     NEW_POST_SUBMIT_LABEL,
     NEW_POST_SUBMITTING_LABEL,
@@ -14,6 +16,7 @@ import {
 } from '../../constants/newPostFormUiTexts';
 import {
     NEW_POST_BODY_INPUT_TEST_ID,
+    NEW_POST_ERROR_TEST_ID,
     NEW_POST_FORM_TEST_ID,
     NEW_POST_SUBMIT_TEST_ID,
     NEW_POST_TITLE_INPUT_TEST_ID,
@@ -31,14 +34,19 @@ interface NewPostFormProps {
     onSubmit: (values: NewPostValues) => Promise<boolean>;
     /** Whether the post is being sent; the form cannot be sent again meanwhile. */
     submitting: boolean;
+    /** Whether the last attempt to publish failed. The typed values are kept to try again. */
+    failed: boolean;
+    /** Called when the person edits a field, e.g. to hide the error of the last attempt. */
+    onEdit: () => void;
 }
 
 /**
  * Form to write a post for the selected user: a title and a text.
  * Used by {@link PostsPanel}.
  */
-const NewPostForm = ({ onSubmit, submitting }: NewPostFormProps) => {
+const NewPostForm = ({ failed, onEdit, onSubmit, submitting }: NewPostFormProps) => {
     const { changeValue, errors, handleSubmit, touchField, values } = useNewPostForm({
+        onEdit,
         onSubmit,
         submitting,
     });
@@ -81,6 +89,11 @@ const NewPostForm = ({ onSubmit, submitting }: NewPostFormProps) => {
                 slotProps={{ htmlInput: { 'data-testid': NEW_POST_BODY_INPUT_TEST_ID } }}
                 value={values.body}
             />
+            {failed && (
+                <Alert data-testid={NEW_POST_ERROR_TEST_ID} severity="error">
+                    {NEW_POST_ERROR_TEXT}
+                </Alert>
+            )}
             <SNewPostActions>
                 <Button
                     data-testid={NEW_POST_SUBMIT_TEST_ID}

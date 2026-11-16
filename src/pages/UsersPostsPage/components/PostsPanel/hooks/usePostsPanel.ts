@@ -16,9 +16,10 @@ import type { NewPostValues } from '../types/newPostValues';
 export const usePostsPanel = (user: User | null) => {
     const [createdPosts, setCreatedPosts] = useState<Post[]>([]);
     const [showCreatedNotice, setShowCreatedNotice] = useState(false);
+    const [failedUserId, setFailedUserId] = useState<number | null>(null);
     const nextLocalId = useRef(-1);
     const { data, error, loading, retry } = usePostsByUser(user?.id ?? null);
-    const { createPost, creating } = useCreatePost();
+    const { clearError, createPost, creating, error: createError } = useCreatePost();
 
     /**
      * Creates a post for the selected user and shows it first in the list.
@@ -31,7 +32,10 @@ export const usePostsPanel = (user: User | null) => {
 
             const created = await createPost({ body, title, userId: user.id });
 
-            if (!created) return false;
+            if (!created) {
+                setFailedUserId(user.id);
+                return false;
+            }
 
             const localPost = { ...created, id: nextLocalId.current };
             nextLocalId.current -= 1;
@@ -52,7 +56,10 @@ export const usePostsPanel = (user: User | null) => {
 
     return {
         addPost,
+        clearCreateError: clearError,
         closeCreatedNotice,
+        // The error belongs to the user it failed for, so it is hidden after selecting another.
+        createFailed: Boolean(createError) && failedUserId === user?.id,
         creating,
         error,
         loading,

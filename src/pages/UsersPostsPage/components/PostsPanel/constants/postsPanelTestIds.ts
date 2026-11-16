@@ -10,3 +10,4 @@ export const NEW_POST_TITLE_INPUT_TEST_ID = 'new-post-title-input';
 export const NEW_POST_BODY_INPUT_TEST_ID = 'new-post-body-input';
 export const NEW_POST_SUBMIT_TEST_ID = 'new-post-submit';
 export const POST_CREATED_SNACKBAR_TEST_ID = 'post-created-snackbar';
+export const NEW_POST_ERROR_TEST_ID = 'new-post-error';

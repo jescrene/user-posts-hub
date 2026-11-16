@@ -21,7 +21,9 @@ interface PostsPanelProps {
 const PostsPanel = ({ user }: PostsPanelProps) => {
     const {
         addPost,
+        clearCreateError,
         closeCreatedNotice,
+        createFailed,
         creating,
         error,
         loading,
@@ -41,7 +43,15 @@ const PostsPanel = ({ user }: PostsPanelProps) => {
             testId={POSTS_PANEL_TEST_ID}
             title={POSTS_PANEL_TITLE}
         >
-            {user && <NewPostForm key={user.id} onSubmit={addPost} submitting={creating} />}
+            {user && (
+                <NewPostForm
+                    failed={createFailed}
+                    key={user.id}
+                    onEdit={clearCreateError}
+                    onSubmit={addPost}
+                    submitting={creating}
+                />
+            )}
             <PostsPanelBody
                 error={error}
                 hasUser={Boolean(user)}

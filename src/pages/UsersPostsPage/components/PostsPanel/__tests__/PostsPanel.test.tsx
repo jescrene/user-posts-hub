@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react';
+import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { http, HttpResponse } from 'msw';
 import { describe, expect, it } from 'vitest';
@@ -32,7 +32,9 @@ describe('PostsPanel', () => {
     it('shows the loading state and then the posts of the user', async () => {
         renderWithProviders(<PostsPanel user={LEANNE} />);
 
-        expect(screen.getByTestId(POSTS_LOADING_TEST_ID)).toBeInTheDocument();
+        const loadingState = screen.getByTestId(POSTS_LOADING_TEST_ID);
+        expect(loadingState).toHaveAttribute('role', 'progressbar');
+        expect(within(loadingState).queryAllByRole('listitem')).toHaveLength(0);
 
         const cards = await screen.findAllByTestId(POST_CARD_TEST_ID);
         expect(cards).toHaveLength(LEANNE_POSTS.length);

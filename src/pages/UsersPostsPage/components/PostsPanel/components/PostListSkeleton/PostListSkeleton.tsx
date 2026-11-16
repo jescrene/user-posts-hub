@@ -11,7 +11,8 @@ const CARDS = [1, 2, 3];
 
 /**
  * Loading state of the posts: placeholder cards with the shape of the post cards, reusing their
- * styles so the layout does not jump when the posts arrive.
+ * styles so the layout does not jump when the posts arrive. They are rendered as plain blocks,
+ * because a progress bar cannot hold list items or articles.
  * Used by {@link PostsPanelBody}.
  */
 const PostListSkeleton = () => {
@@ -21,18 +22,17 @@ const PostListSkeleton = () => {
         <SPostList
             aria-busy
             aria-label={texts.loadingLabel}
+            as="div"
             data-testid={POSTS_LOADING_TEST_ID}
             role="progressbar"
         >
             {CARDS.map((card) => (
-                <li key={card}>
-                    <SPostCard>
-                        <Skeleton height={28} width="70%" />
-                        <Skeleton />
-                        <Skeleton />
-                        <Skeleton width="40%" />
-                    </SPostCard>
-                </li>
+                <SPostCard as="div" key={card}>
+                    <Skeleton height={28} width="70%" />
+                    <Skeleton />
+                    <Skeleton />
+                    <Skeleton width="40%" />
+                </SPostCard>
             ))}
         </SPostList>
     );

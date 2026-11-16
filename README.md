@@ -117,4 +117,4 @@ Hay un error que se quedó en el historial: el cuerpo del commit `aca51c3` muest
 
 ## Tiempo invertido
 
-Unas **2 horas y 10 minutos**: del primer commit (15/11, 23:37) al último cambio de código (16/11, 01:44), más este README.
+Unas **2 horas y 20 minutos**: del primer commit (15/11, 23:37) al commit de este README (16/11, 01:56).

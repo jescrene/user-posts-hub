@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react';
+import { act, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { http, HttpResponse } from 'msw';
 import { describe, expect, it } from 'vitest';
@@ -107,7 +107,7 @@ describe('PostsPanel post creation', () => {
         expect(screen.getByTestId(POST_CARD_TEST_ID)).toHaveTextContent('Post after error');
     });
 
-    it('keeps the form of another user free while a post is being sent', async () => {
+    it('keeps another user free and hides the notice of a post sent for someone else', async () => {
         let release = () => {};
         const released = new Promise<void>((resolve) => {
             release = resolve;
@@ -135,8 +135,22 @@ describe('PostsPanel post creation', () => {
         );
         expect(screen.getByTestId(NEW_POST_SUBMIT_TEST_ID)).toBeEnabled();
 
-        release();
-        expect(await screen.findByTestId(POST_CREATED_SNACKBAR_TEST_ID)).toBeInTheDocument();
-        expect(screen.queryByText('Pending post')).not.toBeInTheDocument();
+        // Let the request end while Ervin is on screen. If it took longer, the notice would show on
+        // Leanne below and the test would fail, so the wait cannot hide a bug.
+        await act(async () => {
+            release();
+            await new Promise((resolve) => setTimeout(resolve, 200));
+        });
+        expect(screen.queryByTestId(POST_CREATED_SNACKBAR_TEST_ID)).not.toBeInTheDocument();
+
+        rerender(
+            <AppProviders>
+                <PostsPanel user={LEANNE} />
+            </AppProviders>,
+        );
+
+        // The post belongs to Leanne, and the notice is not shown because she was not on screen.
+        expect(await screen.findByText('Pending post')).toBeInTheDocument();
+        expect(screen.queryByTestId(POST_CREATED_SNACKBAR_TEST_ID)).not.toBeInTheDocument();
     });
 });

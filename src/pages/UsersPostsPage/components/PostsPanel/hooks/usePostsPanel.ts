@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { useCreatePost } from '@/hooks/api/useCreatePost';
 import { usePostsByUser } from '@/hooks/api/usePostsByUser';
@@ -20,8 +20,14 @@ export const usePostsPanel = (user: User | null) => {
     // Users with a post being sent. A list, so a request that ends does not unlock another one.
     const [pendingUserIds, setPendingUserIds] = useState<number[]>([]);
     const nextLocalId = useRef(-1);
+    // User selected now, read when a request ends to know if the person is still on that user.
+    const selectedUserId = useRef<number | null>(user?.id ?? null);
     const { data, error, loading, retry } = usePostsByUser(user?.id ?? null);
     const { clearError, createPost, error: createError } = useCreatePost();
+
+    useEffect(() => {
+        selectedUserId.current = user?.id ?? null;
+    }, [user]);
 
     /**
      * Creates a post for the selected user and shows it first in the list.
@@ -45,7 +51,8 @@ export const usePostsPanel = (user: User | null) => {
             const localPost = { ...created, id: nextLocalId.current };
             nextLocalId.current -= 1;
             setCreatedPosts((current) => [localPost, ...current]);
-            setShowCreatedNotice(true);
+            // The notice confirms the post to the person looking at that user, not at another one.
+            if (selectedUserId.current === userId) setShowCreatedNotice(true);
 
             return true;
         },

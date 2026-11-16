@@ -29,7 +29,8 @@ interface PostsPanelBodyProps {
 }
 
 /**
- * Content of the posts panel: picks the no user, loading, error, empty or list state.
+ * Content of the posts panel: picks the no user, loading, error, empty or list state. After an
+ * error it still lists the posts created meanwhile.
  * Used by {@link PostsPanel}.
  */
 const PostsPanelBody = ({ error, hasUser, loading, onRetry, posts }: PostsPanelBodyProps) => {
@@ -47,15 +48,19 @@ const PostsPanelBody = ({ error, hasUser, loading, onRetry, posts }: PostsPanelB
 
     if (loading) return <PostListSkeleton />;
 
+    // The posts created in this visit are still shown, because they do not depend on the request.
     if (error) {
         return (
-            <ErrorState
-                message={texts.errorMessage}
-                onRetry={onRetry}
-                retryLabel={texts.retryLabel}
-                testId={POSTS_ERROR_TEST_ID}
-                title={texts.errorTitle}
-            />
+            <>
+                <ErrorState
+                    message={texts.errorMessage}
+                    onRetry={onRetry}
+                    retryLabel={texts.retryLabel}
+                    testId={POSTS_ERROR_TEST_ID}
+                    title={texts.errorTitle}
+                />
+                {posts.length > 0 && <PostList posts={posts} />}
+            </>
         );
     }
 

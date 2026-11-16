@@ -4,7 +4,7 @@ import { http, HttpResponse } from 'msw';
 import { describe, expect, it } from 'vitest';
 
 import { POSTS_FIXTURE, USERS_FIXTURE } from '@/test/msw/fixtures';
-import { POSTS_URL } from '@/test/msw/handlers';
+import { POSTS_URL, USER_POSTS_URL } from '@/test/msw/handlers';
 import { server } from '@/test/msw/server';
 import { renderWithProviders } from '@/test/renderWithProviders';
 
@@ -15,6 +15,7 @@ import {
     NEW_POST_TITLE_INPUT_TEST_ID,
     POST_CARD_TEST_ID,
     POST_CREATED_SNACKBAR_TEST_ID,
+    POSTS_ERROR_TEST_ID,
 } from '../constants/postsPanelTestIds';
 import PostsPanel from '../PostsPanel';
 
@@ -90,5 +91,18 @@ describe('PostsPanel post creation', () => {
         await user.type(screen.getByTestId(NEW_POST_TITLE_INPUT_TEST_ID), '!');
 
         expect(screen.queryByTestId(NEW_POST_ERROR_TEST_ID)).not.toBeInTheDocument();
+    });
+
+    it('shows the created post although the posts of the user could not be loaded', async () => {
+        server.use(http.get(USER_POSTS_URL, () => new HttpResponse(null, { status: 500 })));
+        const user = userEvent.setup();
+        renderWithProviders(<PostsPanel user={LEANNE} />);
+        await screen.findByTestId(POSTS_ERROR_TEST_ID);
+
+        await publishPost(user, 'Post after error', 'Still visible');
+
+        expect(await screen.findByTestId(POST_CREATED_SNACKBAR_TEST_ID)).toBeInTheDocument();
+        expect(screen.getByTestId(POSTS_ERROR_TEST_ID)).toBeInTheDocument();
+        expect(screen.getByTestId(POST_CARD_TEST_ID)).toHaveTextContent('Post after error');
     });
 });

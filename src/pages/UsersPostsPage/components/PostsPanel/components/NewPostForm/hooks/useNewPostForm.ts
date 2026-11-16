@@ -1,7 +1,10 @@
 import { useCallback, useMemo, useState, type FormEvent } from 'react';
 
+import { useUiTexts } from '@/hooks/useUiTexts';
+
+import { newPostFormUiTexts } from '../../../constants/newPostFormUiTexts';
 import type { NewPostValues } from '../../../types/newPostValues';
-import { validateNewPost, type NewPostErrors } from '../../../utils/validateNewPost';
+import { validateNewPost } from '../../../utils/validateNewPost';
 
 type TouchedFields = Record<keyof NewPostValues, boolean>;
 
@@ -27,15 +30,22 @@ export const useNewPostForm = ({ onEdit, onSubmit, submitting }: UseNewPostFormP
     const [touched, setTouched] = useState<TouchedFields>(UNTOUCHED);
     const [submitAttempted, setSubmitAttempted] = useState(false);
 
+    const texts = useUiTexts(newPostFormUiTexts);
     const errors = useMemo(() => validateNewPost(values), [values]);
 
-    /** Errors of the fields the person already left, or of every field after a submit attempt. */
-    const visibleErrors = useMemo<NewPostErrors>(
+    /**
+     * Messages of the fields the person already left, or of every field after a submit attempt,
+     * in the language of the interface.
+     */
+    const visibleErrors = useMemo<Partial<Record<keyof NewPostValues, string>>>(
         () => ({
-            body: submitAttempted || touched.body ? errors.body : undefined,
-            title: submitAttempted || touched.title ? errors.title : undefined,
+            body: (submitAttempted || touched.body) && errors.body ? texts.bodyRequired : undefined,
+            title:
+                (submitAttempted || touched.title) && errors.title
+                    ? texts.titleRequired
+                    : undefined,
         }),
-        [errors, submitAttempted, touched],
+        [errors, submitAttempted, texts, touched],
     );
 
     /**

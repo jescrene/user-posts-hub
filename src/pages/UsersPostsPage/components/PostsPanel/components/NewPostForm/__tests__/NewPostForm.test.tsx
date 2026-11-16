@@ -4,10 +4,7 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { renderWithProviders } from '@/test/renderWithProviders';
 
-import {
-    NEW_POST_BODY_REQUIRED,
-    NEW_POST_TITLE_REQUIRED,
-} from '../../../constants/newPostFormUiTexts';
+import { newPostFormUiTexts } from '../../../constants/newPostFormUiTexts';
 import {
     NEW_POST_BODY_INPUT_TEST_ID,
     NEW_POST_ERROR_TEST_ID,
@@ -34,6 +31,8 @@ const renderForm = (result = true, failed = false) => {
 const getTitleInput = () => screen.getByTestId(NEW_POST_TITLE_INPUT_TEST_ID);
 const getBodyInput = () => screen.getByTestId(NEW_POST_BODY_INPUT_TEST_ID);
 
+const TEXTS = newPostFormUiTexts.en;
+
 describe('NewPostForm', () => {
     it('does not show errors before the person leaves a field', async () => {
         const { user } = renderForm();
@@ -41,11 +40,11 @@ describe('NewPostForm', () => {
         await user.type(getTitleInput(), 'A');
         await user.clear(getTitleInput());
 
-        expect(screen.queryByText(NEW_POST_TITLE_REQUIRED)).not.toBeInTheDocument();
+        expect(screen.queryByText(TEXTS.titleRequired)).not.toBeInTheDocument();
 
         await user.tab();
 
-        expect(screen.getByText(NEW_POST_TITLE_REQUIRED)).toBeInTheDocument();
+        expect(screen.getByText(TEXTS.titleRequired)).toBeInTheDocument();
         expect(getTitleInput()).toHaveAttribute('aria-invalid', 'true');
     });
 
@@ -55,8 +54,8 @@ describe('NewPostForm', () => {
         await user.type(getTitleInput(), '   ');
         await user.click(screen.getByTestId(NEW_POST_SUBMIT_TEST_ID));
 
-        expect(screen.getByText(NEW_POST_TITLE_REQUIRED)).toBeInTheDocument();
-        expect(screen.getByText(NEW_POST_BODY_REQUIRED)).toBeInTheDocument();
+        expect(screen.getByText(TEXTS.titleRequired)).toBeInTheDocument();
+        expect(screen.getByText(TEXTS.bodyRequired)).toBeInTheDocument();
         expect(getBodyInput()).toHaveAttribute('aria-invalid', 'true');
         expect(onSubmit).not.toHaveBeenCalled();
     });

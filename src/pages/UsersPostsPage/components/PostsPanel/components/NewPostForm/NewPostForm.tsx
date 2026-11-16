@@ -4,16 +4,9 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
-import {
-    NEW_POST_BODY_LABEL,
-    NEW_POST_BODY_PLACEHOLDER,
-    NEW_POST_ERROR_TEXT,
-    NEW_POST_FORM_TITLE,
-    NEW_POST_SUBMIT_LABEL,
-    NEW_POST_SUBMITTING_LABEL,
-    NEW_POST_TITLE_LABEL,
-    NEW_POST_TITLE_PLACEHOLDER,
-} from '../../constants/newPostFormUiTexts';
+import { useUiTexts } from '@/hooks/useUiTexts';
+
+import { newPostFormUiTexts } from '../../constants/newPostFormUiTexts';
 import {
     NEW_POST_BODY_INPUT_TEST_ID,
     NEW_POST_ERROR_TEST_ID,
@@ -50,6 +43,7 @@ const NewPostForm = ({ failed, onEdit, onSubmit, submitting }: NewPostFormProps)
         onSubmit,
         submitting,
     });
+    const texts = useUiTexts(newPostFormUiTexts);
 
     return (
         <SNewPostForm
@@ -59,16 +53,16 @@ const NewPostForm = ({ failed, onEdit, onSubmit, submitting }: NewPostFormProps)
             onSubmit={handleSubmit}
         >
             <Typography component="h3" id={FORM_TITLE_ID} variant="subtitle1">
-                {NEW_POST_FORM_TITLE}
+                {texts.formTitle}
             </Typography>
             <TextField
                 error={Boolean(errors.title)}
                 helperText={errors.title}
                 id={TITLE_INPUT_ID}
-                label={NEW_POST_TITLE_LABEL}
+                label={texts.titleLabel}
                 onBlur={() => touchField('title')}
                 onChange={({ target }) => changeValue('title', target.value)}
-                placeholder={NEW_POST_TITLE_PLACEHOLDER}
+                placeholder={texts.titlePlaceholder}
                 required
                 size="small"
                 slotProps={{ htmlInput: { 'data-testid': NEW_POST_TITLE_INPUT_TEST_ID } }}
@@ -78,12 +72,12 @@ const NewPostForm = ({ failed, onEdit, onSubmit, submitting }: NewPostFormProps)
                 error={Boolean(errors.body)}
                 helperText={errors.body}
                 id={BODY_INPUT_ID}
-                label={NEW_POST_BODY_LABEL}
+                label={texts.bodyLabel}
                 minRows={3}
                 multiline
                 onBlur={() => touchField('body')}
                 onChange={({ target }) => changeValue('body', target.value)}
-                placeholder={NEW_POST_BODY_PLACEHOLDER}
+                placeholder={texts.bodyPlaceholder}
                 required
                 size="small"
                 slotProps={{ htmlInput: { 'data-testid': NEW_POST_BODY_INPUT_TEST_ID } }}
@@ -91,7 +85,7 @@ const NewPostForm = ({ failed, onEdit, onSubmit, submitting }: NewPostFormProps)
             />
             {failed && (
                 <Alert data-testid={NEW_POST_ERROR_TEST_ID} severity="error">
-                    {NEW_POST_ERROR_TEXT}
+                    {texts.errorText}
                 </Alert>
             )}
             <SNewPostActions>
@@ -103,7 +97,7 @@ const NewPostForm = ({ failed, onEdit, onSubmit, submitting }: NewPostFormProps)
                     type="submit"
                     variant="contained"
                 >
-                    {submitting ? NEW_POST_SUBMITTING_LABEL : NEW_POST_SUBMIT_LABEL}
+                    {submitting ? texts.submittingLabel : texts.submitLabel}
                 </Button>
             </SNewPostActions>
         </SNewPostForm>

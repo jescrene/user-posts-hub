@@ -15,7 +15,7 @@ export const useCreatePost = () => {
      * Creates a post and returns it, or `null` if an error occurred.
      * @param newPost - Title, body and author of the post.
      * @returns The created post, or `null` when the request fails.
-     * Used by {@link usePostsByUser}.
+     * Used by {@link usePostsPanel}.
      */
     const createPost = useCallback(async (newPost: NewPost): Promise<Post | null> => {
         setCreating(true);

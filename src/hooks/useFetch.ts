@@ -30,7 +30,7 @@ interface SettledRequest<T> {
  * the previous request is aborted when the fetcher changes or the component unmounts, so a late
  * response never overwrites newer data.
  * @param fetcher - Memoized function that loads the data, or `null` to load nothing.
- * Used by {@link usePostsByUser} to load the posts of a user.
+ * Used by {@link useUsers} and {@link usePostsByUser}.
  */
 export const useFetch = <T>(fetcher: Fetcher<T> | null): FetchResult<T> => {
     const [settled, setSettled] = useState<SettledRequest<T> | null>(null);

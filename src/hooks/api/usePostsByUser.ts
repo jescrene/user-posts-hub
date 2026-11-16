@@ -6,7 +6,7 @@ import { useFetch } from '@/hooks/useFetch';
 /**
  * Data hook that loads the posts of a user, and loads them again when the user changes.
  * @param userId - Id of the user, or `null` when no user is selected.
- * Used by {@link useCreatePost} to reload the posts after a new post is created.
+ * Used by {@link usePostsPanel}.
  */
 export const usePostsByUser = (userId: number | null) => {
     const fetcher = useMemo(

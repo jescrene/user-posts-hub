@@ -3,15 +3,18 @@ import Typography from '@mui/material/Typography';
 
 import { SPanel, SPanelHeader, SPanelTitle } from './styled';
 
-/**
- * Props for the PanelContainer component.
- */
 interface PanelContainerProps {
+    /** Heading of the panel. It also names the section for screen readers. */
     title: string;
+    /** Short text under the heading, e.g. how many items the panel shows. */
     subtitle?: ReactNode;
+    /** Element shown at the right of the header, e.g. a button. */
     action?: ReactNode;
+    /** Content of the panel. */
     children: ReactNode;
+    /** Id used by the tests to find the panel. */
     testId?: string;
+    /** Reference to the section, e.g. to scroll to it. */
     ref?: Ref<HTMLElement>;
 }
 
@@ -19,15 +22,7 @@ interface PanelContainerProps {
  * Container of a page section: a bordered surface with a heading and its content. It only lays
  * out the section; the content decides what to render. The section is a landmark named by its
  * heading, and changes of the subtitle are announced by screen readers.
- * Used by {@link SearchResults} and {@link UserDetails}.
- * @param param0
- * @param param0.title
- * @param param0.subtitle
- * @param param0.action
- * @param param0.children
- * @param param0.testId
- * @param param0.ref
- * @constructor
+ * Used by {@link UsersPanel} and {@link PostsPanel}.
  */
 const PanelContainer = ({
     action,

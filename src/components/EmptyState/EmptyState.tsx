@@ -3,23 +3,18 @@ import Typography from '@mui/material/Typography';
 
 import { SEmptyState } from './styled';
 
-/**
- * Props for the EmptyState component.
- */
 interface EmptyStateProps {
+    /** Illustrative icon shown above the message. */
     icon: ReactNode;
+    /** Explains why there is nothing to show. */
     message: string;
+    /** Id used by the tests to find the empty state. */
     testId?: string;
 }
 
 /**
- * Message shown when a page has no content, e.g. because the search returned no results. It shows an icon and a message.
- * Used by {@link PanelContainer} and {@link SearchResults}.
- * @param param0
- * @param param0.icon
- * @param param0.message
- * @param param0.testId
- * @constructor
+ * Message shown instead of a list that has no items, e.g. when a search has no matches.
+ * Used by {@link UsersPanelBody} and {@link PostsPanelBody}.
  */
 const EmptyState = ({ icon, message, testId }: EmptyStateProps) => (
     <SEmptyState data-testid={testId} role="status">

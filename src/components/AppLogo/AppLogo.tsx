@@ -9,7 +9,7 @@ interface AppLogoProps {
 /**
  * Logo of the application: a post bubble with lines of text over a rounded square with the
  * primary and secondary colors of the theme. It is decorative, so screen readers skip it; the
- * title next to it names the application. `public/favicon.svg` is the same drawing.
+ * title next to it names the application. `public/logo.svg`, the favicon, is the same drawing.
  * Used by {@link App}.
  */
 const AppLogo = ({ size = 40 }: AppLogoProps) => {

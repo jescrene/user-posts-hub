@@ -9,6 +9,7 @@ import { LanguageContext } from '@/providers/LanguageContext';
 export const useLanguage = () => {
     const context = useContext(LanguageContext);
 
+    // The context is `null` when the hook is used outside the provider, which is a programming error.
     if (!context) throw new Error('useLanguage must be used inside LanguageProvider.');
 
     return context;

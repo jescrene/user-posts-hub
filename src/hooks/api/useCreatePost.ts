@@ -12,9 +12,10 @@ export const useCreatePost = () => {
     const [error, setError] = useState<Error | null>(null);
 
     /**
-     * Sends the post to the API.
+     * Creates a post and returns it, or `null` if an error occurred.
      * @param newPost - Title, body and author of the post.
      * @returns The created post, or `null` when the request fails.
+     * Used by {@link usePostsByUser}.
      */
     const createPost = useCallback(async (newPost: NewPost): Promise<Post | null> => {
         setCreating(true);
@@ -30,6 +31,7 @@ export const useCreatePost = () => {
         }
     }, []);
 
+    // Clear the error state, e.g. when the user closes the error message.
     const clearError = useCallback(() => setError(null), []);
 
     return { clearError, createPost, creating, error };

@@ -4,3 +4,5 @@ export const NEW_POST_TITLE_PLACEHOLDER = 'What is your post about?';
 export const NEW_POST_BODY_LABEL = 'Text';
 export const NEW_POST_BODY_PLACEHOLDER = 'Write your post…';
 export const NEW_POST_SUBMIT_LABEL = 'Publish post';
+export const NEW_POST_TITLE_REQUIRED = 'Write a title for the post.';
+export const NEW_POST_BODY_REQUIRED = 'Write the text of the post.';

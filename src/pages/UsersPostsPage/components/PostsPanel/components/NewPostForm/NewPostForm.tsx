@@ -22,6 +22,8 @@ import { useNewPostForm } from './hooks/useNewPostForm';
 import { SNewPostActions, SNewPostForm } from './styled';
 
 const FORM_TITLE_ID = 'new-post-form-title';
+const TITLE_INPUT_ID = 'new-post-title';
+const BODY_INPUT_ID = 'new-post-body';
 
 interface NewPostFormProps {
     /** Creates the post; resolves to whether it was created, so the form is cleared. */
@@ -33,7 +35,7 @@ interface NewPostFormProps {
  * Used by {@link PostsPanel}.
  */
 const NewPostForm = ({ onSubmit }: NewPostFormProps) => {
-    const { changeValue, handleSubmit, values } = useNewPostForm(onSubmit);
+    const { changeValue, errors, handleSubmit, touchField, values } = useNewPostForm(onSubmit);
 
     return (
         <SNewPostForm
@@ -46,7 +48,11 @@ const NewPostForm = ({ onSubmit }: NewPostFormProps) => {
                 {NEW_POST_FORM_TITLE}
             </Typography>
             <TextField
+                error={Boolean(errors.title)}
+                helperText={errors.title}
+                id={TITLE_INPUT_ID}
                 label={NEW_POST_TITLE_LABEL}
+                onBlur={() => touchField('title')}
                 onChange={({ target }) => changeValue('title', target.value)}
                 placeholder={NEW_POST_TITLE_PLACEHOLDER}
                 required
@@ -55,9 +61,13 @@ const NewPostForm = ({ onSubmit }: NewPostFormProps) => {
                 value={values.title}
             />
             <TextField
+                error={Boolean(errors.body)}
+                helperText={errors.body}
+                id={BODY_INPUT_ID}
                 label={NEW_POST_BODY_LABEL}
                 minRows={3}
                 multiline
+                onBlur={() => touchField('body')}
                 onChange={({ target }) => changeValue('body', target.value)}
                 placeholder={NEW_POST_BODY_PLACEHOLDER}
                 required

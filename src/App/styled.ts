@@ -15,3 +15,15 @@ export const SAppContainer = styled(Container)(({ theme }) => ({
         paddingTop: theme.spacing(5),
     },
 }));
+
+/**
+ * Page header: the title on the left and the language switch on the right. On narrow screens the
+ * switch moves under the title.
+ */
+export const SAppHeader = styled('header')(({ theme }) => ({
+    alignItems: 'flex-start',
+    display: 'flex',
+    flexWrap: 'wrap',
+    gap: theme.spacing(2),
+    justifyContent: 'space-between',
+}));

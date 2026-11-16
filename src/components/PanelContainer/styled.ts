@@ -1,7 +1,8 @@
 import { styled } from '@mui/material/styles';
 
 /**
- * Surface of a panel: stacks the header and the content, and lets the content fill the height.
+ * Surface of a panel: stacks the header and the content. It is as tall as its content, and it can
+ * shrink inside a container with a limited height, so a list in it can scroll.
  */
 export const SPanel = styled('section')(({ theme }) => ({
     backgroundColor: theme.palette.background.paper,
@@ -10,7 +11,7 @@ export const SPanel = styled('section')(({ theme }) => ({
     display: 'flex',
     flexDirection: 'column',
     gap: theme.spacing(2),
-    height: '100%',
+    minHeight: 0,
     minWidth: 0,
     padding: theme.spacing(2),
     [theme.breakpoints.up('md')]: {

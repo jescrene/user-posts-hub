@@ -1,7 +1,7 @@
 import PostsPanel from './components/PostsPanel/PostsPanel';
 import UsersPanel from './components/UsersPanel/UsersPanel';
 import { useUsersPostsPage } from './hooks/useUsersPostsPage';
-import { SUsersPostsLayout } from './styled';
+import { SUsersColumn, SUsersPostsLayout } from './styled';
 
 /**
  * Page that lists the users and the posts of the selected user. It owns the selection and shares
@@ -12,7 +12,12 @@ const UsersPostsPage = () => {
 
     return (
         <SUsersPostsLayout>
-            <UsersPanel onSelectUser={handleSelectUser} selectedUserId={selectedUser?.id ?? null} />
+            <SUsersColumn>
+                <UsersPanel
+                    onSelectUser={handleSelectUser}
+                    selectedUserId={selectedUser?.id ?? null}
+                />
+            </SUsersColumn>
             <PostsPanel ref={postsPanelRef} user={selectedUser} />
         </SUsersPostsLayout>
     );

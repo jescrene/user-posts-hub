@@ -1,6 +1,6 @@
 import PostsPanel from './components/PostsPanel/PostsPanel';
 import UsersPanel from './components/UsersPanel/UsersPanel';
-import { useSelectedUser } from './hooks/useSelectedUser';
+import { useUsersPostsPage } from './hooks/useUsersPostsPage';
 import { SUsersPostsLayout } from './styled';
 
 /**
@@ -8,12 +8,12 @@ import { SUsersPostsLayout } from './styled';
  * it with both panels.
  */
 const UsersPostsPage = () => {
-    const { selectedUser, selectUser } = useSelectedUser();
+    const { handleSelectUser, postsPanelRef, selectedUser } = useUsersPostsPage();
 
     return (
         <SUsersPostsLayout>
-            <UsersPanel onSelectUser={selectUser} selectedUserId={selectedUser?.id ?? null} />
-            <PostsPanel user={selectedUser} />
+            <UsersPanel onSelectUser={handleSelectUser} selectedUserId={selectedUser?.id ?? null} />
+            <PostsPanel ref={postsPanelRef} user={selectedUser} />
         </SUsersPostsLayout>
     );
 };

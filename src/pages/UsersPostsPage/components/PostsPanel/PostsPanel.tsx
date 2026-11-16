@@ -1,3 +1,5 @@
+import type { Ref } from 'react';
+
 import PanelContainer from '@/components/PanelContainer/PanelContainer';
 import type { User } from '@/types/user';
 
@@ -11,6 +13,8 @@ import { usePostsPanel } from './hooks/usePostsPanel';
 interface PostsPanelProps {
     /** User whose posts are shown, or `null` when no user is selected. */
     user: User | null;
+    /** Reference to the panel, e.g. to scroll to it. */
+    ref?: Ref<HTMLElement>;
 }
 
 /**
@@ -18,7 +22,7 @@ interface PostsPanelProps {
  * from its business hook and passes them to the presentational components.
  * Used by {@link UsersPostsPage}.
  */
-const PostsPanel = ({ user }: PostsPanelProps) => {
+const PostsPanel = ({ ref, user }: PostsPanelProps) => {
     const {
         addPost,
         clearCreateError,
@@ -40,6 +44,7 @@ const PostsPanel = ({ user }: PostsPanelProps) => {
                 loading,
                 userName: user?.name ?? null,
             })}
+            ref={ref}
             testId={POSTS_PANEL_TEST_ID}
             title={POSTS_PANEL_TITLE}
         >

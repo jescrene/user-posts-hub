@@ -1,0 +1,14 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "name": "User Posts Hub",
+  "entryPoints": ["src"],
+  "entryPointStrategy": "expand",
+  "exclude": ["**/__tests__/**", "src/test/**", "src/main.tsx"],
+  "tsconfig": "tsconfig.app.json",
+  "out": "docs",
+  "plugin": ["typedoc-plugin-missing-exports"],
+  "skipErrorChecking": true,
+  "excludePrivate": true,
+  "placeInternalsInOwningModule": true,
+  "excludeExternals": true
+}

@@ -17,13 +17,35 @@ export const SAppContainer = styled(Container)(({ theme }) => ({
 }));
 
 /**
- * Page header: the title on the left and the language switch on the right. On narrow screens the
- * switch moves under the title.
+ * Page header: the brand centered and the language switch on the right. On narrow screens the
+ * switch moves above the brand, so the brand keeps the whole width to stay centered.
  */
 export const SAppHeader = styled('header')(({ theme }) => ({
-    alignItems: 'flex-start',
-    display: 'flex',
-    flexWrap: 'wrap',
+    alignItems: 'center',
+    display: 'grid',
     gap: theme.spacing(2),
-    justifyContent: 'space-between',
+    gridTemplateAreas: '"language" "brand"',
+    [theme.breakpoints.up('sm')]: {
+        gridTemplateAreas: '". brand language"',
+        gridTemplateColumns: '1fr auto 1fr',
+    },
 }));
+
+/**
+ * Logo and title of the application, side by side and centered in the header.
+ */
+export const SAppBrand = styled('div')(({ theme }) => ({
+    alignItems: 'center',
+    display: 'flex',
+    gap: theme.spacing(1.5),
+    gridArea: 'brand',
+    justifyContent: 'center',
+}));
+
+/**
+ * Place of the language switch: the right edge of the header.
+ */
+export const SAppLanguage = styled('div')({
+    gridArea: 'language',
+    justifySelf: 'end',
+});

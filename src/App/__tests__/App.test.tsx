@@ -24,7 +24,9 @@ describe('App', () => {
 
         await user.click(screen.getByRole('button', { name: 'Español' }));
 
-        expect(screen.getByText(appUiTexts.es.subtitle)).toBeInTheDocument();
+        expect(
+            screen.getByRole('group', { name: appUiTexts.es.languageLabel }),
+        ).toBeInTheDocument();
         expect(screen.getByRole('button', { name: 'Español' })).toHaveAttribute(
             'aria-pressed',
             'true',

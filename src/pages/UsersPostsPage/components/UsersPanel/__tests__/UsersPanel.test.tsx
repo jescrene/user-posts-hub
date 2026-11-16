@@ -1,7 +1,7 @@
 import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { http, HttpResponse } from 'msw';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import { USERS_FIXTURE } from '@/test/msw/fixtures';
 import { USERS_URL } from '@/test/msw/handlers';
@@ -18,9 +18,21 @@ import {
 import { USER_SEARCH_CLEAR_LABEL, USERS_RETRY_LABEL } from '../constants/usersPanelUiTexts';
 import UsersPanel from '../UsersPanel';
 
+/**
+ * @param selectedUserId - Id of the selected user.
+ * @returns The spy that receives the picked user.
+ */
+const renderUsersPanel = (selectedUserId: number | null = null) => {
+    const onSelectUser = vi.fn();
+
+    renderWithProviders(<UsersPanel onSelectUser={onSelectUser} selectedUserId={selectedUserId} />);
+
+    return onSelectUser;
+};
+
 describe('UsersPanel', () => {
     it('shows the loading state and then every user', async () => {
-        renderWithProviders(<UsersPanel />);
+        renderUsersPanel();
 
         expect(screen.getByTestId(USERS_LOADING_TEST_ID)).toBeInTheDocument();
         expect(await screen.findAllByTestId(USER_LIST_ITEM_TEST_ID)).toHaveLength(
@@ -31,7 +43,7 @@ describe('UsersPanel', () => {
 
     it('filters the users by name and clears the search', async () => {
         const user = userEvent.setup();
-        renderWithProviders(<UsersPanel />);
+        renderUsersPanel();
         await screen.findAllByTestId(USER_LIST_ITEM_TEST_ID);
 
         await user.type(screen.getByTestId(USER_SEARCH_INPUT_TEST_ID), 'ervin');
@@ -47,7 +59,7 @@ describe('UsersPanel', () => {
 
     it('explains when no user matches the search', async () => {
         const user = userEvent.setup();
-        renderWithProviders(<UsersPanel />);
+        renderUsersPanel();
         await screen.findAllByTestId(USER_LIST_ITEM_TEST_ID);
 
         await user.type(screen.getByTestId(USER_SEARCH_INPUT_TEST_ID), 'nobody');
@@ -61,7 +73,7 @@ describe('UsersPanel', () => {
             http.get(USERS_URL, () => new HttpResponse(null, { status: 500 }), { once: true }),
         );
         const user = userEvent.setup();
-        renderWithProviders(<UsersPanel />);
+        renderUsersPanel();
 
         expect(await screen.findByTestId(USERS_ERROR_TEST_ID)).toBeInTheDocument();
 
@@ -71,5 +83,17 @@ describe('UsersPanel', () => {
             USERS_FIXTURE.length,
         );
         expect(screen.queryByTestId(USERS_ERROR_TEST_ID)).not.toBeInTheDocument();
+    });
+
+    it('marks the selected user and sends the user the person picks', async () => {
+        const user = userEvent.setup();
+        const onSelectUser = renderUsersPanel(1);
+
+        const leanne = await screen.findByRole('button', { name: /Leanne Graham/ });
+        expect(leanne).toHaveAttribute('aria-current', 'true');
+
+        await user.click(screen.getByRole('button', { name: /Ervin Howell/ }));
+
+        expect(onSelectUser).toHaveBeenCalledWith(USERS_FIXTURE[1]);
     });
 });

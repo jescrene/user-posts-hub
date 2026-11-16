@@ -26,13 +26,25 @@ interface UsersPanelBodyProps {
     search: string;
     /** Loads the users again. */
     onRetry: () => void;
+    /** Id of the selected user, or `null`. */
+    selectedUserId: number | null;
+    /** Receives the user the person picks. */
+    onSelectUser: (user: User) => void;
 }
 
 /**
  * Content of the users panel: picks the loading, error, empty or list state.
  * Used by {@link UsersPanel}.
  */
-const UsersPanelBody = ({ error, loading, onRetry, search, users }: UsersPanelBodyProps) => {
+const UsersPanelBody = ({
+    error,
+    loading,
+    onRetry,
+    onSelectUser,
+    search,
+    selectedUserId,
+    users,
+}: UsersPanelBodyProps) => {
     if (loading) return <UserListSkeleton />;
 
     if (error) {
@@ -57,7 +69,7 @@ const UsersPanelBody = ({ error, loading, onRetry, search, users }: UsersPanelBo
         );
     }
 
-    return <UserList users={users} />;
+    return <UserList onSelectUser={onSelectUser} selectedUserId={selectedUserId} users={users} />;
 };
 
 export default UsersPanelBody;

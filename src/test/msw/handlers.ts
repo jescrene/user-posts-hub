@@ -1,6 +1,6 @@
-import type { RequestHandler } from 'msw';
+import type { AnyHandler } from 'msw';
 
 /**
  * Default API handlers shared by every test (happy paths).
  */
-export const handlers: RequestHandler[] = [];
+export const handlers: AnyHandler[] = [];

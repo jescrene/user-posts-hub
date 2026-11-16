@@ -6,3 +6,5 @@ export const NEW_POST_BODY_PLACEHOLDER = 'Write your post…';
 export const NEW_POST_SUBMIT_LABEL = 'Publish post';
 export const NEW_POST_TITLE_REQUIRED = 'Write a title for the post.';
 export const NEW_POST_BODY_REQUIRED = 'Write the text of the post.';
+export const NEW_POST_SUBMITTING_LABEL = 'Publishing…';
+export const NEW_POST_CREATED_TEXT = 'Your post was published.';

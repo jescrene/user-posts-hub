@@ -12,9 +12,16 @@ const UNTOUCHED: TouchedFields = { body: false, title: false };
  * Business hook of the new post form: keeps the typed values, validates them and clears them
  * once the post is created. A field shows its error only after the person leaves it or tries to
  * publish, so the form does not complain while it is being filled in.
- * @param onSubmit - Creates the post; resolves to whether it was created.
+ * @param params.onSubmit - Creates the post; resolves to whether it was created.
+ * @param params.submitting - Whether the post is being sent, so it is not sent twice.
  */
-export const useNewPostForm = (onSubmit: (values: NewPostValues) => Promise<boolean>) => {
+export const useNewPostForm = ({
+    onSubmit,
+    submitting,
+}: {
+    onSubmit: (values: NewPostValues) => Promise<boolean>;
+    submitting: boolean;
+}) => {
     const [values, setValues] = useState<NewPostValues>(EMPTY_VALUES);
     const [touched, setTouched] = useState<TouchedFields>(UNTOUCHED);
     const [submitAttempted, setSubmitAttempted] = useState(false);
@@ -48,6 +55,7 @@ export const useNewPostForm = (onSubmit: (values: NewPostValues) => Promise<bool
     const handleSubmit = useCallback(
         async (event: FormEvent<HTMLFormElement>) => {
             event.preventDefault();
+            if (submitting) return;
             setSubmitAttempted(true);
 
             if (Object.keys(errors).length > 0) return;
@@ -58,7 +66,7 @@ export const useNewPostForm = (onSubmit: (values: NewPostValues) => Promise<bool
                 setSubmitAttempted(false);
             }
         },
-        [errors, onSubmit, values],
+        [errors, onSubmit, submitting, values],
     );
 
     return { changeValue, errors: visibleErrors, handleSubmit, touchField, values };

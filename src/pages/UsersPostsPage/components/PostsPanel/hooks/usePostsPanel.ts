@@ -15,9 +15,10 @@ import type { NewPostValues } from '../types/newPostValues';
  */
 export const usePostsPanel = (user: User | null) => {
     const [createdPosts, setCreatedPosts] = useState<Post[]>([]);
+    const [showCreatedNotice, setShowCreatedNotice] = useState(false);
     const nextLocalId = useRef(-1);
     const { data, error, loading, retry } = usePostsByUser(user?.id ?? null);
-    const { createPost } = useCreatePost();
+    const { createPost, creating } = useCreatePost();
 
     /**
      * Creates a post for the selected user and shows it first in the list.
@@ -35,16 +36,28 @@ export const usePostsPanel = (user: User | null) => {
             const localPost = { ...created, id: nextLocalId.current };
             nextLocalId.current -= 1;
             setCreatedPosts((current) => [localPost, ...current]);
+            setShowCreatedNotice(true);
 
             return true;
         },
         [createPost, user],
     );
 
+    const closeCreatedNotice = useCallback(() => setShowCreatedNotice(false), []);
+
     const posts = useMemo(
         () => [...createdPosts.filter(({ userId }) => userId === user?.id), ...(data ?? [])],
         [createdPosts, data, user],
     );
 
-    return { addPost, error, loading, posts, retry };
+    return {
+        addPost,
+        closeCreatedNotice,
+        creating,
+        error,
+        loading,
+        posts,
+        retry,
+        showCreatedNotice,
+    };
 };

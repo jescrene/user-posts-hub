@@ -8,6 +8,7 @@ import {
     NEW_POST_BODY_PLACEHOLDER,
     NEW_POST_FORM_TITLE,
     NEW_POST_SUBMIT_LABEL,
+    NEW_POST_SUBMITTING_LABEL,
     NEW_POST_TITLE_LABEL,
     NEW_POST_TITLE_PLACEHOLDER,
 } from '../../constants/newPostFormUiTexts';
@@ -28,14 +29,19 @@ const BODY_INPUT_ID = 'new-post-body';
 interface NewPostFormProps {
     /** Creates the post; resolves to whether it was created, so the form is cleared. */
     onSubmit: (values: NewPostValues) => Promise<boolean>;
+    /** Whether the post is being sent; the form cannot be sent again meanwhile. */
+    submitting: boolean;
 }
 
 /**
  * Form to write a post for the selected user: a title and a text.
  * Used by {@link PostsPanel}.
  */
-const NewPostForm = ({ onSubmit }: NewPostFormProps) => {
-    const { changeValue, errors, handleSubmit, touchField, values } = useNewPostForm(onSubmit);
+const NewPostForm = ({ onSubmit, submitting }: NewPostFormProps) => {
+    const { changeValue, errors, handleSubmit, touchField, values } = useNewPostForm({
+        onSubmit,
+        submitting,
+    });
 
     return (
         <SNewPostForm
@@ -79,10 +85,12 @@ const NewPostForm = ({ onSubmit }: NewPostFormProps) => {
                 <Button
                     data-testid={NEW_POST_SUBMIT_TEST_ID}
                     endIcon={<SendIcon />}
+                    loading={submitting}
+                    loadingPosition="end"
                     type="submit"
                     variant="contained"
                 >
-                    {NEW_POST_SUBMIT_LABEL}
+                    {submitting ? NEW_POST_SUBMITTING_LABEL : NEW_POST_SUBMIT_LABEL}
                 </Button>
             </SNewPostActions>
         </SNewPostForm>

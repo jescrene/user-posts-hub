@@ -16,7 +16,7 @@ interface PostCardProps {
  */
 const PostCard = ({ post }: PostCardProps) => (
     <SPostCard data-testid={POST_CARD_TEST_ID}>
-        <Typography component="h3" sx={{ fontWeight: 600 }} variant="subtitle1">
+        <Typography component="h3" sx={{ fontWeight: 600, lineHeight: 1.4 }} variant="subtitle1">
             {post.title}
         </Typography>
         <Typography color="text.secondary" sx={{ whiteSpace: 'pre-line' }} variant="body2">

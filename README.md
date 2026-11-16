@@ -71,7 +71,7 @@ El flujo de datos va siempre en un sentido: **`api/` → hooks de datos → hook
 
 ## Tests
 
-47 tests en 15 archivos, con Vitest, Testing Library y MSW:
+49 tests en 15 archivos, con Vitest, Testing Library y MSW:
 
 - **Hooks de datos:** carga, error, reintento y creación de publicaciones.
 - **Reglas puras:** búsqueda por nombre, validación del formulario, iniciales del avatar y detección del idioma.
@@ -114,6 +114,16 @@ Usé asistentes de IA, **Claude Code y Codex**, durante todo el desarrollo. No i
 - La documentación JSDoc la revisé y completé yo.
 
 Hay un error que se quedó en el historial: el cuerpo del commit `aca51c3` muestra un `\n` literal. Corregirlo obligaba a reescribir el historial ya subido, y preferí no hacerlo.
+
+**Revisión final de QA:** al terminar pedí a la IA una revisión completa de `main` con criterio de QA en React 19. La revisión incluyó una prueba funcional en Edge con Playwright, y cada hallazgo se corrigió en su propio commit con un test de regresión que fallaba antes del arreglo:
+
+- Si fallaba la carga de las publicaciones, la que se creaba no aparecía, aunque el aviso dijera que se había publicado (`20e152f`).
+- Al cambiar de usuario mientras se publicaba, el formulario del nuevo usuario se quedaba bloqueado en "Publishing…" (`ef29751`). Además, el aviso de publicada salía sobre el otro usuario (`016df2d`).
+- Después de publicar, el foco del teclado se perdía porque el botón se deshabilita durante el envío. Ahora vuelve al título (`0d02fcd`).
+- El esqueleto de carga dejaba elementos `<li>` dentro de un `progressbar`, algo inválido en ARIA (`0e529f5`).
+- Un cambio de documentación (`9ed811c`) había quitado el JSDoc de las props de los componentes compartidos y enlazaba componentes que no existen. Se restauró en `82090d6`, y los "Used by" de la capa de datos se corrigieron en `d03117c`.
+
+También se descartaron falsos positivos, como un posible doble envío del formulario o respuestas tardías que pisaran datos nuevos, comprobando que el código ya los evitaba.
 
 ## Tiempo invertido
 
